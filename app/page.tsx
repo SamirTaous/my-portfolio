@@ -10,6 +10,7 @@ import TechStack from '@/components/tech-stack'
 import About from '@/components/about'
 import Contact from '@/components/contact'
 import Footer from '@/components/footer'
+import ScrollController from '@/components/scroll-controller'
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -25,6 +26,7 @@ export default function Home() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Navbar isScrolled={isScrolled} />
+      <ScrollController />
       <Hero />
       <Services />
       <Projects />

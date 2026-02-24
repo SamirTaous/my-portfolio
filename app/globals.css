@@ -194,6 +194,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Smooth scrolling with optional snap */
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity; /* Less aggressive than mandatory */
+  }
+  
+  /* Each section can snap */
+  section {
+    scroll-snap-align: start;
+  }
 }
 
 @layer utilities {
