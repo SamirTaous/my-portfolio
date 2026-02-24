@@ -140,28 +140,32 @@ export default function Navbar({ isScrolled }: NavbarProps) {
 
           {/* Mobile Menu */}
           {isOpen && (
-            <div className="md:hidden mt-4 pt-4 border-t border-border flex flex-col gap-3">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-left transition-colors text-sm font-medium ${isActive(item.index)
-                    ? 'text-cyan-400'
-                    : 'text-muted-foreground hover:text-cyan-400'
-                    }`}
-                >
-                  {item.name}
-                </button>
-              ))}
-              <button
-                onClick={() => scrollToSection('contact')}
-                className={`w-full mt-2 px-4 py-2 font-bold rounded-full transition-all text-sm ${isActive(6)
-                  ? 'bg-cyan-600 text-black'
-                  : 'bg-cyan-500 hover:bg-cyan-600 text-black'
-                  }`}
-              >
-                Hire Me
-              </button>
+            <div className="md:hidden absolute top-full left-0 right-0 mt-2 mx-4">
+              <div className="bg-card border border-border rounded-xl shadow-xl backdrop-blur-md p-6 space-y-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block w-full text-left px-4 py-3 rounded-lg transition-colors text-sm font-medium hover:bg-secondary/50 ${isActive(item.index)
+                        ? 'text-cyan-400 bg-cyan-500/10'
+                        : 'text-muted-foreground hover:text-cyan-400'
+                      }`}
+                  >
+                    {item.name}
+                  </button>
+                ))}
+                <div className="pt-2 border-t border-border">
+                  <button
+                    onClick={() => scrollToSection('contact')}
+                    className={`w-full px-4 py-3 font-bold rounded-lg transition-all text-sm ${isActive(6)
+                        ? 'bg-cyan-600 text-black'
+                        : 'bg-cyan-500 hover:bg-cyan-600 text-black'
+                      }`}
+                  >
+                    Hire Me
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
