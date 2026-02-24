@@ -129,14 +129,14 @@ export default function ScrollController() {
 
   return (
     <>
-      {/* Section indicators - left side */}
-      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+      {/* Section indicators - hidden on mobile, visible on desktop */}
+      <div className="hidden lg:flex fixed left-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
         {sectionNames.map((name, index) => (
           <div key={index} className="flex items-center gap-2 group cursor-pointer" onClick={() => scrollToSection(index)}>
             <div
               className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSection === index
-                  ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50 scale-150'
-                  : 'bg-black/30 dark:bg-white/30 hover:bg-cyan-400/60 hover:scale-125'
+                ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50 scale-150'
+                : 'bg-black/30 dark:bg-white/30 hover:bg-cyan-400/60 hover:scale-125'
                 }`}
               aria-label={`Go to ${name} section`}
             />
@@ -150,6 +150,21 @@ export default function ScrollController() {
         ))}
       </div>
 
+      {/* Mobile section indicator - minimal dots at bottom */}
+      <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-2">
+        {sectionNames.map((_, index) => (
+          <div
+            key={index}
+            className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${currentSection === index
+              ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50 scale-125'
+              : 'bg-white/30 hover:bg-cyan-400/60'
+              }`}
+            onClick={() => scrollToSection(index)}
+            aria-label={`Go to ${sectionNames[index]} section`}
+          />
+        ))}
+      </div>
+
       {/* Progress bar */}
       <div className="fixed top-0 left-0 w-full h-0.5 bg-white/10 z-50">
         <div
@@ -158,9 +173,9 @@ export default function ScrollController() {
         />
       </div>
 
-      {/* Keyboard hint - only show on first section */}
+      {/* Keyboard hint - only show on desktop and first section */}
       {currentSection === 0 && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 text-white/40 text-xs flex items-center gap-2 animate-pulse">
+        <div className="hidden lg:block fixed bottom-8 left-1/2 -translate-x-1/2 z-50 text-white/40 text-xs flex items-center gap-2 animate-pulse">
           Use ↑↓ or Space to navigate
         </div>
       )}
