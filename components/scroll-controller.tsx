@@ -3,30 +3,85 @@ import { useEffect, useState, useCallback } from 'react'
 
 export default function ScrollController() {
   const [currentSection, setCurrentSection] = useState(0)
-  const sectionNames = ['Hero', 'Services', 'Projects', 'Experience', 'Tech', 'About', 'Contact']
+  const sectionNames = ['Hero', 'Services', 'Projects', 'Experience', 'Tech', 'About', 'Contact', 'Footer']
 
-  const scrollToSection = useCallback((index: number) => {
+  const scrollToSection = useCallback((index: number, isWheelTriggered = false) => {
     const sections = document.querySelectorAll('section')
-    if (sections[index]) {
-      const originalScrollBehavior = document.documentElement.style.scrollBehavior
-      const originalScrollSnapType = document.documentElement.style.scrollSnapType
-      document.documentElement.style.scrollBehavior = 'smooth'
-      document.documentElement.style.scrollSnapType = 'none'
+    const footer = document.querySelector('footer')
+    const allElements = [...Array.from(sections)]
+    if (footer) allElements.push(footer)
 
-      const targetElement = sections[index] as HTMLElement
-      const targetPosition = targetElement.offsetTop
-      window.scrollTo({ top: targetPosition, behavior: 'smooth' })
+    if (allElements[index]) {
+      const targetElement = allElements[index] as HTMLElement
+      let targetPosition = targetElement.offsetTop
 
-      setTimeout(() => {
-        document.documentElement.style.scrollBehavior = originalScrollBehavior
-        document.documentElement.style.scrollSnapType = originalScrollSnapType || 'y proximity'
-      }, 1000)
+      // Special handling for footer - ensure we can scroll to the very bottom
+      if (index === allElements.length - 1 && footer) {
+        const documentHeight = document.documentElement.scrollHeight
+        const windowHeight = window.innerHeight
+        targetPosition = Math.max(targetPosition, documentHeight - windowHeight)
+      }
+
+      if (isWheelTriggered) {
+        // For wheel-triggered scrolling, use a more controlled approach
+        const startPosition = window.scrollY
+        const distance = targetPosition - startPosition
+        const duration = 800 // Smooth animation duration
+        let startTime: number | null = null
+
+        // Temporarily disable scroll snap during animation
+        document.documentElement.style.scrollSnapType = 'none'
+        document.body.style.scrollSnapType = 'none'
+
+        const animateScroll = (currentTime: number) => {
+          if (startTime === null) startTime = currentTime
+          const timeElapsed = currentTime - startTime
+          const progress = Math.min(timeElapsed / duration, 1)
+
+          // Easing function for smooth animation
+          const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+          const easedProgress = easeInOutCubic(progress)
+
+          window.scrollTo(0, startPosition + distance * easedProgress)
+
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll)
+          } else {
+            // Re-enable scroll snap after animation
+            setTimeout(() => {
+              document.documentElement.style.scrollSnapType = 'y proximity'
+              document.body.style.scrollSnapType = 'y proximity'
+            }, 100)
+          }
+        }
+
+        requestAnimationFrame(animateScroll)
+      } else {
+        // For keyboard and click navigation, use the original method
+        const originalScrollBehavior = document.documentElement.style.scrollBehavior
+        const originalScrollSnapType = document.documentElement.style.scrollSnapType
+        document.documentElement.style.scrollBehavior = 'smooth'
+        document.documentElement.style.scrollSnapType = 'none'
+
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' })
+
+        setTimeout(() => {
+          document.documentElement.style.scrollBehavior = originalScrollBehavior
+          document.documentElement.style.scrollSnapType = originalScrollSnapType || 'y proximity'
+        }, 1000)
+      }
     }
   }, [])
 
   useEffect(() => {
     const sections = document.querySelectorAll('section')
+    const footer = document.querySelector('footer')
+    const allElements = [...Array.from(sections)]
+    if (footer) allElements.push(footer)
+
     const sectionRatios = new Map<Element, number>()
+    let isScrolling = false
+    let scrollTimeout: NodeJS.Timeout
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -42,7 +97,7 @@ export default function ScrollController() {
         sectionRatios.forEach((ratio, el) => {
           if (ratio > maxRatio) {
             maxRatio = ratio
-            const index = Array.from(sections).indexOf(el as HTMLElement)
+            const index = allElements.indexOf(el as HTMLElement)
             if (index !== -1) activeSection = index
           }
         })
@@ -57,17 +112,25 @@ export default function ScrollController() {
       }
     )
 
-    sections.forEach((section) => {
-      observer.observe(section)
+    allElements.forEach((element) => {
+      if (element) observer.observe(element)
     })
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY
       const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
       const detectionPoint = scrollPosition + windowHeight / 2
 
-      sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect()
+      // Special case: if we're near the bottom of the page, activate footer
+      if (scrollPosition + windowHeight >= documentHeight - 50) {
+        setCurrentSection(allElements.length - 1)
+        return
+      }
+
+      allElements.forEach((element, index) => {
+        if (!element) return
+        const rect = element.getBoundingClientRect()
         const sectionTop = scrollPosition + rect.top
         const sectionBottom = sectionTop + rect.height
 
@@ -77,12 +140,88 @@ export default function ScrollController() {
       })
     }
 
+    const handleWheel = (e: WheelEvent) => {
+      // Don't interfere if user is scrolling within form elements
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      // Prevent multiple rapid wheel events
+      if (isScrolling) {
+        e.preventDefault()
+        return
+      }
+
+      const currentSectionElement = allElements[currentSection]
+      if (!currentSectionElement) return
+
+      const rect = currentSectionElement.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+      const scrollPosition = window.scrollY
+      const documentHeight = document.documentElement.scrollHeight
+
+      // More lenient boundary detection
+      const atTop = rect.top >= -50 // Increased tolerance
+      const atBottom = rect.bottom <= windowHeight + 50 // Increased tolerance
+      
+      // Special case for Contact section (index 6) to Footer (index 7)
+      const isContactSection = currentSection === 6
+      const isFooter = currentSection === allElements.length - 1
+      const atPageBottom = scrollPosition + windowHeight >= documentHeight - 50
+
+      // Only handle section jumping if we're at section boundaries
+      if (e.deltaY > 0) {
+        // Scrolling down
+        let shouldJump = false
+        
+        if (isContactSection) {
+          // Special handling for Contact -> Footer transition
+          // Be more aggressive about detecting when we can jump to footer
+          shouldJump = rect.bottom <= windowHeight + 100 // More lenient for contact
+        } else if (isFooter) {
+          // For footer, only jump if not at page bottom
+          shouldJump = atBottom && !atPageBottom
+        } else {
+          // For other sections, use normal detection
+          shouldJump = atBottom
+        }
+        
+        if (shouldJump) {
+          const nextSection = Math.min(allElements.length - 1, currentSection + 1)
+          if (nextSection !== currentSection) {
+            e.preventDefault()
+            isScrolling = true
+            scrollToSection(nextSection, true)
+
+            clearTimeout(scrollTimeout)
+            scrollTimeout = setTimeout(() => {
+              isScrolling = false
+            }, 1000)
+          }
+        }
+      } else if (e.deltaY < 0 && atTop) {
+        // Scrolling up and at top of section
+        const prevSection = Math.max(0, currentSection - 1)
+        if (prevSection !== currentSection) {
+          e.preventDefault()
+          isScrolling = true
+          scrollToSection(prevSection, true)
+
+          clearTimeout(scrollTimeout)
+          scrollTimeout = setTimeout(() => {
+            isScrolling = false
+          }, 1000)
+        }
+      }
+      // If not at boundaries, allow normal scrolling within the section
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return
       }
 
-      const totalSections = sections.length
+      const totalSections = allElements.length
       let targetSection = currentSection
 
       switch (e.key) {
@@ -117,6 +256,7 @@ export default function ScrollController() {
 
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('wheel', handleWheel, { passive: false })
 
     handleScroll()
 
@@ -124,6 +264,8 @@ export default function ScrollController() {
       observer.disconnect()
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('wheel', handleWheel)
+      clearTimeout(scrollTimeout)
     }
   }, [currentSection, scrollToSection])
 
