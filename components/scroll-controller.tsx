@@ -221,6 +221,12 @@ export default function ScrollController() {
         return
       }
 
+      // Prevent multiple rapid key events
+      if (isScrolling) {
+        e.preventDefault()
+        return
+      }
+
       const totalSections = allElements.length
       let targetSection = currentSection
 
@@ -250,7 +256,13 @@ export default function ScrollController() {
       }
 
       if (targetSection !== currentSection) {
-        scrollToSection(targetSection)
+        isScrolling = true
+        scrollToSection(targetSection, true) // Use wheel-triggered animation for keyboard too
+        
+        clearTimeout(scrollTimeout)
+        scrollTimeout = setTimeout(() => {
+          isScrolling = false
+        }, 1000)
       }
     }
 

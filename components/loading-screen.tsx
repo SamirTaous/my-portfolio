@@ -3,21 +3,64 @@
 import { useEffect, useState } from 'react'
 
 export default function LoadingScreen() {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimating(true)
-      setTimeout(() => {
-        setIsVisible(false)
-      }, 500) // Fade out duration
-    }, 2500) // Show for 2.5 seconds
+    // Check if page is still loading
+    const checkLoadingState = () => {
+      if (document.readyState === 'complete') {
+        setIsLoading(false)
+        return
+      }
+      setIsVisible(true)
+    }
 
-    return () => clearTimeout(timer)
+    // Initial check
+    checkLoadingState()
+
+    // Listen for load events
+    const handleLoad = () => {
+      setIsLoading(false)
+    }
+
+    const handleReadyStateChange = () => {
+      if (document.readyState === 'complete') {
+        setIsLoading(false)
+      }
+    }
+
+    window.addEventListener('load', handleLoad)
+    document.addEventListener('readystatechange', handleReadyStateChange)
+
+    // Fallback timer - hide after 3 seconds max
+    const fallbackTimer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+
+    return () => {
+      window.removeEventListener('load', handleLoad)
+      document.removeEventListener('readystatechange', handleReadyStateChange)
+      clearTimeout(fallbackTimer)
+    }
   }, [])
 
-  if (!isVisible) return null
+  useEffect(() => {
+    if (!isLoading && isVisible) {
+      // Start fade out animation
+      setIsAnimating(true)
+      const timer = setTimeout(() => {
+        setIsVisible(false)
+      }, 500) // Fade out duration
+
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading, isVisible])
+
+  // Don't show loading screen if page is already loaded
+  if (!isLoading && !isVisible) return null
+  if (!isLoading && !isAnimating) return null
 
   return (
     <div 
@@ -26,10 +69,6 @@ export default function LoadingScreen() {
       }`}
     >
       <div className="text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-8 animate-pulse">
-          Samir Taous
-        </h1>
-        
         {/* Loading animation */}
         <div className="flex justify-center space-x-2">
           <div className="w-3 h-3 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
