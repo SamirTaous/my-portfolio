@@ -49,7 +49,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden pt-32 pb-20">
+    <section className="relative min-h-screen overflow-hidden pt-32 pb-48">
       {/* Animated gradient mesh background */}
       <div className="absolute inset-0 overflow-hidden bg-background">
         {/* Gradient mesh blobs */}

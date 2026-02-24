@@ -91,8 +91,8 @@ export default function Navbar({ isScrolled }: NavbarProps) {
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={`relative group transition-colors text-xs font-medium uppercase tracking-wider ${isActive(item.index)
-                      ? 'text-cyan-400'
-                      : 'text-muted-foreground hover:text-cyan-400'
+                    ? 'text-cyan-400'
+                    : 'text-muted-foreground hover:text-cyan-400'
                     }`}
                 >
                   {item.name}
@@ -146,8 +146,8 @@ export default function Navbar({ isScrolled }: NavbarProps) {
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={`text-left transition-colors text-sm font-medium ${isActive(item.index)
-                      ? 'text-cyan-400'
-                      : 'text-muted-foreground hover:text-cyan-400'
+                    ? 'text-cyan-400'
+                    : 'text-muted-foreground hover:text-cyan-400'
                     }`}
                 >
                   {item.name}

@@ -2,7 +2,7 @@
 
 export default function About() {
   return (
-    <section id="about" className="py-32 px-4 sm:px-6 lg:px-8 bg-alternating-section-alt">
+    <section id="about" className="py-48 px-4 sm:px-6 lg:px-8 bg-alternating-section-alt">
       <div className="max-w-4xl mx-auto">
         <div className="space-y-16">
           {/* Header */}
