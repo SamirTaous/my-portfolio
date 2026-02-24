@@ -70,28 +70,28 @@ export default function Services() {
                   onClick={() => setExpandedIndex(isExpanded ? null : idx)}
                   className="w-full group"
                 >
-                  <div className="flex items-start gap-6 sm:gap-8 py-6 px-6 border-b border-border hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
+                  <div className="flex items-start gap-3 sm:gap-6 md:gap-8 py-6 px-3 sm:px-6 border-b border-border hover:border-cyan-500/30 transition-all duration-300 cursor-pointer"
                   >
                     {/* Number */}
-                    <div className="font-display font-bold text-3xl sm:text-4xl text-cyan-500 group-hover:text-cyan-400 transition-colors flex-shrink-0 w-16 text-right">
+                    <div className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-cyan-500 group-hover:text-cyan-400 transition-colors flex-shrink-0 w-8 sm:w-12 md:w-16 text-right">
                       {String(idx + 1).padStart(2, '0')}
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 text-left">
-                      <h3 className="font-display font-bold text-2xl sm:text-3xl text-foreground group-hover:text-cyan-400 transition-colors">
+                    <div className="flex-1 text-left min-w-0">
+                      <h3 className="font-display font-bold text-lg sm:text-2xl md:text-3xl text-foreground group-hover:text-cyan-400 transition-colors">
                         {service.title}
                       </h3>
                       {isExpanded && (
                         <div className="mt-4 space-y-4 animate-fade-in-up">
-                          <p className="font-body text-muted-foreground text-base leading-relaxed">
+                          <p className="font-body text-muted-foreground text-sm sm:text-base leading-relaxed">
                             {service.description}
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {service.tech.map((t, i) => (
                               <span
                                 key={i}
-                                className="px-3 py-1 bg-cyan-500/10 text-cyan-300 text-xs font-medium rounded-full border border-cyan-500/30 font-body"
+                                className="px-2 sm:px-3 py-1 bg-cyan-500/10 text-cyan-300 text-xs font-medium rounded-full border border-cyan-500/30 font-body"
                               >
                                 {t}
                               </span>
@@ -102,13 +102,13 @@ export default function Services() {
                     </div>
 
                     {/* Icon and chevron */}
-                    <div className="flex items-center gap-4 flex-shrink-0">
-                      <div className={`w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center group-hover:bg-cyan-500/20 transition-all ${
+                    <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center group-hover:bg-cyan-500/20 transition-all ${
                         isExpanded ? 'bg-cyan-500/20' : ''
                       }`}>
-                        <Icon className="w-5 h-5 text-cyan-400" />
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
                       </div>
-                      <div className={`w-5 h-5 text-cyan-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                      <div className={`w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
                         ↓
                       </div>
                     </div>

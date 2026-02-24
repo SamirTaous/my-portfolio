@@ -147,8 +147,8 @@ export default function Navbar({ isScrolled }: NavbarProps) {
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     className={`block w-full text-left px-4 py-3 rounded-lg transition-colors text-sm font-medium hover:bg-secondary/50 ${isActive(item.index)
-                        ? 'text-cyan-400 bg-cyan-500/10'
-                        : 'text-muted-foreground hover:text-cyan-400'
+                      ? 'text-cyan-400 bg-cyan-500/10'
+                      : 'text-muted-foreground hover:text-cyan-400'
                       }`}
                   >
                     {item.name}
@@ -158,8 +158,8 @@ export default function Navbar({ isScrolled }: NavbarProps) {
                   <button
                     onClick={() => scrollToSection('contact')}
                     className={`w-full px-4 py-3 font-bold rounded-lg transition-all text-sm ${isActive(6)
-                        ? 'bg-cyan-600 text-black'
-                        : 'bg-cyan-500 hover:bg-cyan-600 text-black'
+                      ? 'bg-cyan-600 text-black'
+                      : 'bg-cyan-500 hover:bg-cyan-600 text-black'
                       }`}
                   >
                     Hire Me
