@@ -29,7 +29,7 @@ export default function TechStack() {
   ]
 
   return (
-    <section className="py-32 px-4 sm:px-6 lg:px-8 bg-background">
+    <section id="tech-stack" className="py-32 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center space-y-6 mb-24">

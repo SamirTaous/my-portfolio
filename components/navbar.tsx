@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ThemeToggle from './theme-toggle'
 
 interface NavbarProps {
@@ -11,6 +11,51 @@ interface NavbarProps {
 
 export default function Navbar({ isScrolled }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [currentSection, setCurrentSection] = useState(0)
+
+  const navItems = [
+    { name: 'Services', id: 'services', index: 1 },
+    { name: 'Projects', id: 'projects', index: 2 },
+    { name: 'Experience', id: 'experience', index: 3 },
+    { name: 'Tech', id: 'tech-stack', index: 4 },
+    { name: 'About', id: 'about', index: 5 },
+  ]
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('section')
+      const footer = document.querySelector('footer')
+      const allElements = [...Array.from(sections)]
+      if (footer) allElements.push(footer)
+
+      const scrollPosition = window.scrollY
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+      const detectionPoint = scrollPosition + windowHeight / 2
+
+      // Special case: if we're near the bottom of the page, activate footer
+      if (scrollPosition + windowHeight >= documentHeight - 50) {
+        setCurrentSection(allElements.length - 1)
+        return
+      }
+
+      allElements.forEach((element, index) => {
+        if (!element) return
+        const rect = element.getBoundingClientRect()
+        const sectionTop = scrollPosition + rect.top
+        const sectionBottom = sectionTop + rect.height
+
+        if (detectionPoint >= sectionTop && detectionPoint < sectionBottom) {
+          setCurrentSection(index)
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const scrollToSection = (id: string) => {
     setIsOpen(false)
@@ -20,14 +65,15 @@ export default function Navbar({ isScrolled }: NavbarProps) {
     }
   }
 
+  const isActive = (index: number) => currentSection === index
+
   return (
     <nav className="fixed top-0 w-full z-50 pt-6 px-4">
       {/* Floating pill navbar - centered */}
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div
-          className={`glass-adaptive rounded-full px-8 py-3 transition-all duration-300 ${
-            isScrolled ? 'shadow-xl' : ''
-          }`}
+          className={`glass-adaptive rounded-full px-8 py-3 transition-all duration-300 ${isScrolled ? 'shadow-xl' : ''
+            }`}
         >
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -39,31 +85,27 @@ export default function Navbar({ isScrolled }: NavbarProps) {
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8 flex-1 justify-center px-8">
-              <button
-                onClick={() => scrollToSection('services')}
-                className="relative-underline text-muted-foreground hover:text-foreground transition-colors text-xs font-medium uppercase tracking-wider"
-              >
-                Services
-              </button>
-              <button
-                onClick={() => scrollToSection('projects')}
-                className="relative-underline text-muted-foreground hover:text-foreground transition-colors text-xs font-medium uppercase tracking-wider"
-              >
-                Projects
-              </button>
-              <button
-                onClick={() => scrollToSection('experience')}
-                className="relative-underline text-muted-foreground hover:text-foreground transition-colors text-xs font-medium uppercase tracking-wider"
-              >
-                Experience
-              </button>
-              <button
-                onClick={() => scrollToSection('about')}
-                className="relative-underline text-muted-foreground hover:text-foreground transition-colors text-xs font-medium uppercase tracking-wider"
-              >
-                About
-              </button>
+            <div className="hidden md:flex items-center gap-6 flex-1 justify-center px-8">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative group transition-colors text-xs font-medium uppercase tracking-wider ${isActive(item.index)
+                      ? 'text-cyan-400'
+                      : 'text-muted-foreground hover:text-cyan-400'
+                    }`}
+                >
+                  {item.name}
+                  {/* Active underline */}
+                  {isActive(item.index) && (
+                    <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-cyan-400 rounded-full" />
+                  )}
+                  {/* Hover underline */}
+                  {!isActive(item.index) && (
+                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 rounded-full group-hover:w-full transition-all duration-300" />
+                  )}
+                </button>
+              ))}
             </div>
 
             {/* CTA Button and Theme Toggle */}
@@ -71,7 +113,10 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               <ThemeToggle />
               <button
                 onClick={() => scrollToSection('contact')}
-                className="px-5 py-1.5 bg-cyan-500 hover:bg-cyan-600 text-black font-bold text-xs rounded-full transition-all duration-300 glow-hover uppercase tracking-wider"
+                className={`px-5 py-1.5 font-bold text-xs rounded-full transition-all duration-300 glow-hover uppercase tracking-wider ${isActive(6)
+                  ? 'bg-cyan-600 text-black'
+                  : 'bg-cyan-500 hover:bg-cyan-600 text-black'
+                  }`}
               >
                 Hire Me
               </button>
@@ -96,33 +141,24 @@ export default function Navbar({ isScrolled }: NavbarProps) {
           {/* Mobile Menu */}
           {isOpen && (
             <div className="md:hidden mt-4 pt-4 border-t border-border flex flex-col gap-3">
-              <button
-                onClick={() => scrollToSection('services')}
-                className="text-left text-muted-foreground hover:text-accent transition-colors text-sm font-medium"
-              >
-                Services
-              </button>
-              <button
-                onClick={() => scrollToSection('projects')}
-                className="text-left text-muted-foreground hover:text-accent transition-colors text-sm font-medium"
-              >
-                Projects
-              </button>
-              <button
-                onClick={() => scrollToSection('experience')}
-                className="text-left text-muted-foreground hover:text-accent transition-colors text-sm font-medium"
-              >
-                Experience
-              </button>
-              <button
-                onClick={() => scrollToSection('about')}
-                className="text-left text-muted-foreground hover:text-accent transition-colors text-sm font-medium"
-              >
-                About
-              </button>
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`text-left transition-colors text-sm font-medium ${isActive(item.index)
+                      ? 'text-cyan-400'
+                      : 'text-muted-foreground hover:text-cyan-400'
+                    }`}
+                >
+                  {item.name}
+                </button>
+              ))}
               <button
                 onClick={() => scrollToSection('contact')}
-                className="w-full mt-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-full transition-all text-sm"
+                className={`w-full mt-2 px-4 py-2 font-bold rounded-full transition-all text-sm ${isActive(6)
+                  ? 'bg-cyan-600 text-black'
+                  : 'bg-cyan-500 hover:bg-cyan-600 text-black'
+                  }`}
               >
                 Hire Me
               </button>
