@@ -1,25 +1,30 @@
 'use client'
 
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react'
+import Image from 'next/image'
 
 const projects = [
   {
-    title: 'Cloud-Native FinTech',
-    subtitle: 'Enterprise financial dashboard with AI',
+    title: 'ASMAS — Digital Banking Platform',
+    subtitle: 'Academic Project',
     description:
-      'Enterprise-grade financial dashboard with microservices architecture and AI-powered loan classification model. Real-time data processing with sophisticated risk assessment.',
-    image: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    tech: ['React.js', 'Java', 'Spring Boot', 'REST APIs', 'PostgreSQL'],
-    tags: ['Microservices', 'AI/ML', 'Finance'],
+      'Full-stack banking dashboard featuring account management, transaction tracking, card controls with lock/freeze, loan management, and real-time financial analytics. Built with a live REST API backend.',
+    image: '/fintech-platform.png',
+    tech: ['React', 'Vite', 'Chakra UI', 'Framer Motion', 'Recharts', 'Node.js', 'Express.js', 'JWT'],
+    tags: ['FinTech', 'Dashboard', 'Full-Stack'],
+    liveUrl: 'https://fintech-dashboard-gray.vercel.app/',
+    githubUrl: 'https://github.com/SamirTaous/fintech-dashboard',
   },
   {
-    title: 'AI-Powered EdTech Game',
-    subtitle: 'Learning platform with generative AI',
+    title: 'Café Bab Tanger — Restaurant Landing Page',
+    subtitle: 'Concept Project',
     description:
-      'Interactive learning platform generating quiz questions from uploaded PDFs using generative AI. Built for engaging STEM education with adaptive difficulty.',
-    image: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    tech: ['Unity', 'C#', 'Python', 'Flask', 'MongoDB', 'Generative AI'],
-    tags: ['EdTech', 'Gaming', 'AI'],
+      'Modern restaurant landing page for a fictional Moroccan café in Tangier. Features a full menu page with search and filtering, gallery, reviews, and reservation system.',
+    image: '/cafe-concept.png',
+    tech: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'Vercel'],
+    tags: ['Restaurant', 'Landing Page', 'Concept'],
+    liveUrl: 'https://cafe-concept-page.vercel.app/',
+    githubUrl: 'https://github.com/SamirTaous/cafe-concept-page',
   },
   {
     title: 'Oracle Admin Platform',
@@ -29,6 +34,8 @@ const projects = [
     image: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     tech: ['React.js', 'Spring', 'Oracle DB', 'PL/SQL', 'Docker'],
     tags: ['Database', 'DevOps', 'Enterprise'],
+    liveUrl: null,
+    githubUrl: null,
   },
 ]
 
@@ -53,11 +60,22 @@ export default function Projects() {
               key={idx}
               className="group relative rounded-2xl overflow-hidden bg-card border border-border hover:border-cyan-500/50 transition-all duration-500 flex flex-col h-full hover:shadow-2xl hover:shadow-cyan-500/20"
             >
-              {/* Image section with gradient */}
-              <div
-                className="relative h-56 overflow-hidden bg-gradient-to-br"
-                style={{ background: project.image }}
-              >
+              {/* Image section */}
+              <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                {project.image.startsWith('/') ? (
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full bg-gradient-to-br"
+                    style={{ background: project.image }}
+                  />
+                )}
+                
                 {/* Overlay that dims on hover */}
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all duration-500" />
                 
@@ -110,14 +128,45 @@ export default function Projects() {
 
                 {/* Action buttons */}
                 <div className="flex gap-3 pt-4">
-                  <button className="flex-1 group/btn px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/40 text-sm font-display uppercase tracking-wide">
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Live</span>
-                  </button>
-                  <button className="flex-1 group/btn px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 border border-border hover:border-cyan-500/30 text-sm font-display uppercase tracking-wide">
-                    <Github className="w-4 h-4" />
-                    <span>Code</span>
-                  </button>
+                  {project.liveUrl ? (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 group/btn px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/40 text-sm font-display uppercase tracking-wide"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Live</span>
+                    </a>
+                  ) : (
+                    <button
+                      disabled
+                      className="flex-1 px-4 py-2 bg-gray-400 text-gray-600 font-bold rounded-lg cursor-not-allowed flex items-center justify-center gap-2 text-sm font-display uppercase tracking-wide opacity-50"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Live</span>
+                    </button>
+                  )}
+                  
+                  {project.githubUrl ? (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 group/btn px-4 py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 border border-border hover:border-cyan-500/30 text-sm font-display uppercase tracking-wide"
+                    >
+                      <Github className="w-4 h-4" />
+                      <span>Code</span>
+                    </a>
+                  ) : (
+                    <button
+                      disabled
+                      className="flex-1 px-4 py-2 bg-gray-400 text-gray-600 font-bold rounded-lg cursor-not-allowed flex items-center justify-center gap-2 border border-gray-400 text-sm font-display uppercase tracking-wide opacity-50"
+                    >
+                      <Github className="w-4 h-4" />
+                      <span>Code</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

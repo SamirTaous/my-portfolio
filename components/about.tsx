@@ -18,11 +18,11 @@ export default function About() {
             {/* Main bio */}
             <div className="space-y-8">
               <p className="font-body text-foreground leading-relaxed text-lg">
-                I'm a full-stack developer who builds production-ready web and mobile applications, and helps businesses integrate AI into their products. I work with startups and companies to ship fast, scalable, and intelligent software.
+                I'm a full-stack developer who builds production-ready web and mobile applications for businesses of all sizes. Available for freelance projects and consulting work with local businesses in Tangier and remote clients worldwide.
               </p>
 
               <p className="font-body text-foreground leading-relaxed text-lg">
-                With expertise spanning from microservices architecture to generative AI integration, I bridge the gap between complex technical requirements and elegant, user-focused solutions.
+                With expertise spanning from modern web frameworks to scalable backend systems, I help businesses transform their ideas into elegant, user-focused digital solutions that drive growth.
               </p>
 
               <div className="space-y-4 pt-4 border-t border-border">

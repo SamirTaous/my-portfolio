@@ -81,7 +81,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               <div className="w-7 h-7 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-black font-bold text-xs">S</span>
               </div>
-              <span className="font-display font-bold text-foreground text-sm hidden sm:inline">Samir</span>
+              <span className="font-display font-bold text-foreground text-sm hidden sm:inline">Samir Taous</span>
             </Link>
 
             {/* Desktop Menu */}

@@ -1,44 +1,44 @@
 'use client'
 
 import { useState } from 'react'
-import { Code2, Zap, Database, Smartphone, Settings2, Brain } from 'lucide-react'
+import { ShoppingCart, Globe, Rocket, Layers, Brain, Smartphone } from 'lucide-react'
 
 const services = [
   {
-    icon: Code2,
-    title: 'Custom Web Applications',
-    description: 'Production-ready web apps built with React, Next.js, Spring Boot, and modern full-stack architectures. Responsive, performant, scalable.',
-    tech: ['React.js', 'Spring Boot', 'Next.js'],
+    icon: ShoppingCart,
+    title: 'E-commerce Store Development',
+    description: 'Complete online stores with payment processing, inventory management, and customer accounts. Built for conversions and growth.',
+    tech: ['Next.js', 'Stripe', 'PayPal', 'CMI'],
+  },
+  {
+    icon: Globe,
+    title: 'Business Website Design',
+    description: 'Professional websites that showcase your business and attract customers. Fast, mobile-friendly, and search engine optimized.',
+    tech: ['Next.js', 'Tailwind CSS', 'SEO', 'Vercel'],
+  },
+  {
+    icon: Rocket,
+    title: 'Landing Pages',
+    description: 'High-converting landing pages for marketing campaigns, product launches, and lead generation. Optimized for maximum impact.',
+    tech: ['React', 'Framer Motion', 'Analytics'],
+  },
+  {
+    icon: Layers,
+    title: 'SaaS Development',
+    description: 'Build scalable web applications and software products from idea to launch. Complete development lifecycle management.',
+    tech: ['Next.js', 'Node.js', 'PostgreSQL', 'Docker'],
   },
   {
     icon: Brain,
-    title: 'AI Integration & Automation',
-    description: 'Integrate cutting-edge LLMs and generative AI into your products. From Gemini API to custom ML pipelines and RAG systems.',
-    tech: ['Gemini API', 'LLMs', 'Generative AI'],
-  },
-  {
-    icon: Settings2,
-    title: 'REST API Design',
-    description: 'Scalable, well-documented APIs using Spring Boot, REST patterns, and microservices architecture. Built for reliability.',
-    tech: ['Spring Boot', 'REST APIs', 'Microservices'],
+    title: 'AI Integration',
+    description: 'Add intelligent features and automation to existing products. Chatbots, content generation, and smart workflows.',
+    tech: ['OpenAI API', 'Gemini API', 'LangChain', 'Python'],
   },
   {
     icon: Smartphone,
-    title: 'Mobile App Development',
-    description: 'Interactive mobile games and applications built with Unity and C#. Engaging user experiences across platforms.',
-    tech: ['Unity', 'C#', 'Game Development'],
-  },
-  {
-    icon: Database,
-    title: 'Database Design',
-    description: 'Optimize and architect databases for performance. Expert in PostgreSQL, MongoDB, Oracle, and cloud-native solutions.',
-    tech: ['PostgreSQL', 'MongoDB', 'Oracle'],
-  },
-  {
-    icon: Zap,
-    title: 'Performance Optimization',
-    description: 'Improve speed, scalability, and efficiency across your entire stack. Profiling, caching, DevOps optimization.',
-    tech: ['Optimization', 'DevOps', 'Cloud'],
+    title: 'Mobile-Friendly Development',
+    description: 'Responsive designs that work perfectly on all devices. Mobile-first approach for optimal user experience.',
+    tech: ['React Native', 'PWA', 'Responsive Design'],
   },
 ]
 
@@ -54,7 +54,7 @@ export default function Services() {
             Services
           </h2>
           <p className="font-body text-xl text-muted-foreground max-w-xl leading-relaxed">
-            Specialized in building intelligent, scalable applications that solve real problems.
+            Professional web development services for businesses in Tangier and worldwide.
           </p>
         </div>
 

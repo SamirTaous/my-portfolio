@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 interface Particle {
   id: number
@@ -84,62 +85,88 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12">
-          {/* Main headline - Giant typography */}
-          <div className="space-y-8 animate-fade-in-up">
-            <h1 className="font-display font-bold text-7xl sm:text-8xl lg:text-9xl text-foreground leading-none text-balance" style={{ letterSpacing: '-0.02em' }}>
-              Samir Taous
-            </h1>
+        {/* Mobile: Profile photo first, centered */}
+        <div className="flex justify-center mb-12 lg:hidden animate-fade-in-up">
+          <div className="relative">
+            <div className="w-48 h-48 rounded-full border-2 border-cyan-500/40 shadow-2xl shadow-cyan-500/20 overflow-hidden">
+              <Image
+                src="/samirtaous-picture.jpeg"
+                alt="Samir Taous - Full-Stack Developer"
+                width={192}
+                height={192}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+            {/* Glow effect */}
+            <div className="absolute inset-0 rounded-full bg-cyan-500/10 blur-xl animate-pulse-glow" />
+          </div>
+        </div>
 
-            <div className="space-y-4 max-w-3xl">
-              <p className="font-display font-bold text-3xl sm:text-4xl text-cyan-400 leading-tight text-balance">
-                Full-Stack Developer & AI Specialist
-              </p>
-              <p className="font-body text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
-                I build production-ready applications with React, Spring Boot, and Python. Specialized in AI integration, microservices architecture, and scalable databases.
-              </p>
+        {/* Desktop: Two-column layout */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left column: Text content */}
+          <div className="space-y-12">
+            {/* Main headline - Giant typography */}
+            <div className="space-y-8 animate-fade-in-up">
+              <h1 className="font-display font-bold text-6xl sm:text-7xl lg:text-8xl text-foreground leading-none text-balance" style={{ letterSpacing: '-0.02em' }}>
+                Samir Taous
+              </h1>
+
+              <div className="space-y-4">
+                <p className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-cyan-400 leading-tight text-balance">
+                  Full-Stack Developer & Web Consultant
+                </p>
+                <p className="font-body text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                  I build modern websites and e-commerce stores for businesses. Based in Tanger, available worldwide.
+                </p>
+              </div>
+            </div>
+
+            {/* Availability badge with pulse animation */}
+            <div className="flex items-center gap-3 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+              <div className="relative">
+                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse-glow" />
+              </div>
+              <span className="font-body text-sm text-muted-foreground">Available for freelance projects</span>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+              <button
+                onClick={() => scrollToSection('projects')}
+                className="group relative px-8 py-4 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-full transition-all duration-300 glow-hover flex items-center justify-center gap-2 text-lg font-display uppercase tracking-wide"
+              >
+                See My Work
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => scrollToSection('contact')}
+                className="px-8 py-4 bg-transparent border-2 border-cyan-500 hover:bg-cyan-500/10 text-cyan-400 font-bold rounded-full transition-all duration-300 font-display uppercase tracking-wide text-lg"
+              >
+                Let's Talk
+              </button>
             </div>
           </div>
 
-          {/* Availability badge with pulse animation */}
-          <div className="flex items-center gap-3 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          {/* Right column: Profile photo (desktop only) */}
+          <div className="hidden lg:flex justify-center animate-fade-in-up" style={{ animationDelay: '300ms' }}>
             <div className="relative">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse-glow" />
-            </div>
-            <span className="font-body text-sm text-muted-foreground">Available for freelance projects</span>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <button
-              onClick={() => scrollToSection('projects')}
-              className="group relative px-8 py-4 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-full transition-all duration-300 glow-hover flex items-center justify-center gap-2 text-lg font-display uppercase tracking-wide"
-            >
-              See My Work
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-            </button>
-
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="px-8 py-4 bg-transparent border-2 border-cyan-500 hover:bg-cyan-500/10 text-cyan-400 font-bold rounded-full transition-all duration-300 font-display uppercase tracking-wide text-lg"
-            >
-              Let's Talk
-            </button>
-          </div>
-
-          {/* Stats - staggered reveal */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 pt-16 max-w-2xl">
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-              <p className="font-display font-bold text-5xl sm:text-6xl text-cyan-400">5+</p>
-              <p className="font-body text-muted-foreground">Years Experience</p>
-            </div>
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              <p className="font-display font-bold text-5xl sm:text-6xl text-cyan-400">15+</p>
-              <p className="font-body text-muted-foreground">Projects Shipped</p>
-            </div>
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-              <p className="font-display font-bold text-5xl sm:text-6xl text-cyan-400">2</p>
-              <p className="font-body text-muted-foreground">Languages</p>
+              <div className="w-80 h-80 rounded-full border-2 border-cyan-500/40 shadow-2xl shadow-cyan-500/20 overflow-hidden">
+                <Image
+                  src="/samirtaous-picture.jpeg"
+                  alt="Samir Taous - Full-Stack Developer"
+                  width={320}
+                  height={320}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-full bg-cyan-500/10 blur-xl animate-pulse-glow" />
+              {/* Additional subtle ring */}
+              <div className="absolute inset-4 rounded-full border border-cyan-500/20" />
             </div>
           </div>
         </div>
